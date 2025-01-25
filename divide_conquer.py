@@ -37,19 +37,25 @@ def divide_and_conquer_closest_pair(points: list[tuple[float, float]]) -> tuple[
     # we will enter the recursive section
 
     # sort first by x
-    points.sort(key=lambda x: x[0])
+    points_x = sorted(points, key=lambda x: x[0])
 
     # calculate left and right
     median_n = math.floor(n / 2)
-    left = points[:median_n:]
-    right = points[median_n::]
-
     
     # calculate median_x
-    median_x = points[median_n][0]
+    median_x = points_x[median_n][0]
     if n % 2 == 0:
-        median_x = (points[median_n - 1][0] + median_x) / 2
+        median_x = (points_x[median_n - 1][0] + median_x) / 2
     
+    left = []
+    right = []
+    
+    for point in points:
+        if point[0] <= median_x:
+            left.append(point)
+        else:
+            right.append(point)
+
     d1, p1 = divide_and_conquer_closest_pair(left)
     d2, p2 = divide_and_conquer_closest_pair(right)
     d = min(d1, d2)
@@ -82,6 +88,7 @@ def divide_and_conquer_closest_pair(points: list[tuple[float, float]]) -> tuple[
     for i in range(len(middle)):
         j = i + 1
         while j < len(middle):
+
             if abs(middle[i][1] - middle[j][1]) > d:
                 break
 
